@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="margin: 0%; padding: 0%">
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js";
+      import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js";
+      //Creates scene and camera
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(
+        85,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+     
+      //Creates renderer and adds it to the DOM
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+      //The Box!
+      //BoxGeometry (makes a geometry)
+      var geometry = new THREE.BoxGeometry(3, 5.5, 0.3);
+      //Material to apply to the cube (green)
+      var material = new THREE.MeshBasicMaterial({ color: 0x7a694b });
+      //Applies material to BoxGeometry
+      var cube = new THREE.Mesh(geometry, material);
+      //Adds cube to the scene
+      scene.add(cube);
+      //Sets camera's distance away from cube (using this explanation only for simplicity's sake - in reality this actually sets the 'depth' of the camera's position)
+
+      //Adding controls 
+      var controls = new OrbitControls(camera, renderer.domElement);
+      // uncommit to see controls functionality
+      // controls.rotateSpeed = 0.5;
+      // controls.autoRotate = true;
+      // controls.autoRotateSpeed = 10;
+      // controls.minDistance = 1;
+      // controls.maxDistance = 100;
+
+
+      camera.position.z = 4;
+      controls.update();
+      // camera.position.set(x, y, z);
+      // camera.position.set(0.5, 1.5, 8);
+
+      //Rendering
+      function render() {
+        // cube.rotation.x += 0.01;
+        // cube.rotation.z += 0.01;
+        // cube.rotation.y += 0.01;
+        requestAnimationFrame(render);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      render();
+      const manager = new THREE.LoadingManager();
+      const textureLoader = new THREE.TextureLoader(manager);
+    </script>
+  </body>
+</html>
