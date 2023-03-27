@@ -105,7 +105,6 @@
         const handleGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 5);
         const handleMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
         const handleMesh = new THREE.Mesh(handleGeometry, handleMaterial);
-        handleMesh.name = "handleMesh";
         handleMesh.position.set(1.2, height / 10 + -0.4, 0);
         const transformControls = new TransformControls(
           camera,
@@ -113,11 +112,10 @@
         );
         transformControls.attach(handleMesh);
         scene.add(transformControls);
-        
+
         transformControls.addEventListener("dragging-changed", (event) => {
           controls.enabled = !event.value;
         });
-        
         cube.add(handleMesh);
         //dragging the handle
         // Initialize the controls
@@ -145,52 +143,29 @@
         // cloneButton.innerText = "Double Door";
         cloneButton.classList.add("clone-button");
         document.body.appendChild(cloneButton);
-        
         // Add an event listener to the button to clone the cube
-   // Add an event listener to the button to clone the cube
-// Add an event listener to the button to clone the cube
+        cloneButton.querySelector("select").addEventListener("change", () => {
+          const option = cloneButton.querySelector("select").value;
+          if (option === "Double") {
+            clonedDoors++;
+            const clone = cube.clone();
+            clone.scale.x = -1;
 
-cloneButton.querySelector("select").addEventListener("change", () => {
-  const option = cloneButton.querySelector("select").value;
-  if (option === "Double") {
-    clonedDoors++;
-    const clone = cube.clone();
-
-    clone.position.x += width + 0.3;
-    if (clonedDoors % 2 === 0) {
-      // Access the handle mesh of the cloned box geometry and update its position
-      clone.getObjectByName("handleMesh").position.set(-1.2, height / 10 - 0.4, 0);
-    } else {
-      // Access the handle mesh of the cloned box geometry and update its position
-      clone.getObjectByName("handleMesh").position.set(1.2, height / 10 - 0.4, 0);
-      clone.rotation.y += Math.PI;
-    }
-    scene.add(clone);
-  } else if (option === "Single") {
-    // Remove any existing cubes from the scene
-    scene.remove(
-      ...scene.children.filter((child) => child instanceof THREE.Mesh)
-    );
-    // Add a new cube to the scene
-    const newCube = cube.clone();
-    scene.add(newCube);
-  }if (option === "Double") {
-    clonedDoors++;
-    const clone = cube.clone();
-
-    clone.position.x += width + 0.3;
-    const handleMesh = clone.getObjectByName("handleMesh");
-    if (clonedDoors % 2 === 0) {
-        handleMesh.position.set(-1.2, height / 10 - 0.4, 0);
-    } else {
-        handleMesh.position.set(1.2, height / 10 - 0.4, 0);
-        clone.rotation.y += Math.PI;
-    }
-    scene.add(clone);
-}
-
-});
-
+            // Clone the handle mesh and attach it to the cloned geometry
+            const clonedHandleMesh = handleMesh.clone();
+            clone.add(clonedHandleMesh);
+            clone.position.x += width + 0.3;
+            scene.add(clone);
+          } else if (option === "Single") {
+            // Remove any existing cubes from the scene
+            scene.remove(
+              ...scene.children.filter((child) => child instanceof THREE.Mesh)
+            );
+            // Add a new cube to the scene
+            const newCube = cube.clone();
+            scene.add(newCube);
+          }
+        });
 
         // Render the scene
         const render = () => {
