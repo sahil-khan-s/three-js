@@ -115,10 +115,7 @@
         scene.add(cube2);
 
         // Add handle to second cube
-        const handleMesh2 = new THREE.Mesh(handleGeometry, handleMaterial);
-        handleMesh2.position.set(-1.2, height / 10 + -0.4, 0);
-        cube2.add(handleMesh2);
-
+        
         const transformControls = new TransformControls(
           camera,
           renderer.domElement
